@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../api'; // Axios para conectar con la API
-import './login.css';
-
+import DOMPurify from 'dompurify';  // Biblioteca para sanitizar entradas
+import '../styles/css/styles.css';
 
 const Registro = () => {
     const [fullname, setFullname] = useState('');
@@ -12,8 +12,19 @@ const Registro = () => {
 
     const handleRegister = async (e) => {
         e.preventDefault();
+        
+        // Sanitiza las entradas para evitar XSS
+        const sanitizedFullname = DOMPurify.sanitize(fullname);
+        const sanitizedEmail = DOMPurify.sanitize(email);
+        const sanitizedPassword = DOMPurify.sanitize(password);
+
         try {
-            await api.post('/usuarios', { fullname, email, password });
+            await api.post('/usuarios', { 
+                fullname: sanitizedFullname, 
+                email: sanitizedEmail, 
+                password: sanitizedPassword 
+            });
+
             alert('Registro exitoso. Ahora puedes iniciar sesión.');
             navigate('/login'); // Redirige al login después del registro
         } catch (error) {

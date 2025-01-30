@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { api } from '../api'; // API con Axios para obtener datos
 
+
+
 const Dashboard = () => {
     const [usuarios, setUsuarios] = useState([]);
 
